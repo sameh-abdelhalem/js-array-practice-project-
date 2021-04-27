@@ -61,16 +61,67 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const displayMovements = movements => {
+  movements.forEach((mov, i) => {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = `
+  <div class="movements__row">
+    <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+    <div class="movements__value">${mov}€</div>
+  </div>`;
+
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+displayMovements(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+/////////////////////////////////////////////////
+
+// SLICE
+let arr = ['a', 'b', 'c', 'd', 'e'];
+let arr2 = ['f', 'g', 'h', 'i', 'j'];
+
+// console.log(arr.slice(2));
+// console.log(arr.slice());
+
+// SPLICE Mutates array
+
+// REVERSE Mutates the array
+
+// CONCAT
+const letters = arr.concat(arr2);
+
+// console.log(letters);
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-/////////////////////////////////////////////////
+// for (const movement of movements) {
+//   if (movement < 0) {
+//     console.log(`you withdrew ${Math.abs(movement)}`);
+//   } else {
+//     console.log(`you deposited ${Math.abs(movement)}`);
+//   }
+// }
+
+// movements.forEach((movement, i) => {
+//   movement < 0
+//     ? console.log(`movement ${i + 1} you withdrew ${Math.abs(movement)}`)
+//     : console.log(`movement ${i + 1} you deposited ${Math.abs(movement)}`);
+// });
+
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
+
+// const currenciesUnique = new Set(['USD', 'GBP', 'EUR']);
+// currenciesUnique.forEach((value, _, map) => {
+//   console.log(`${vaue} : ${value}`);
+// });
+// console.log(currenciesUnique);
