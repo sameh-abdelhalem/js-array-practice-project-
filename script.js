@@ -62,6 +62,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const displayMovements = movements => {
+  containerMovements.innerHTML = '';
   movements.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
@@ -74,6 +75,23 @@ const displayMovements = movements => {
   });
 };
 displayMovements(account1.movements);
+
+const calcAndDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+calcAndDisplayBalance(account1.movements);
+const createUsernames = function (accs) {
+  accs.forEach(acc => {
+    acc.username = acc.owner
+      .split(' ')
+      .map(user => user[0])
+      .join('')
+      .toLowerCase();
+  });
+};
+createUsernames(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -125,3 +143,66 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 //   console.log(`${vaue} : ${value}`);
 // });
 // console.log(currenciesUnique);
+
+/* coding challenge 1:  Coding Challenge #1
+Julia and Kate are doing a study on dogs. So each of them asked 5 dog owners
+about their dog's age, and stored the data into an array (one array for each). For
+now, they are just interested in knowing whether a dog is an adult or a puppy.
+A dog is an adult if it is at least 3 years old, and it's a puppy if it's less than 3 years
+old.
+Your tasks:
+Create a function 'checkDogs', which accepts 2 arrays of dog's ages
+('dogsJulia' and 'dogsKate'), and does the following things:
+1. Julia found out that the owners of the first and the last two dogs actually have
+cats, not dogs! So create a shallow copy of Julia's array, and remove the cat
+ages from that copied array (because it's a bad practice to mutate function
+parameters)
+2. Create an array with both Julia's (corrected) and Kate's data
+3. For each remaining dog, log to the console whether it's an adult ("Dog number 1
+is an adult, and is 5 years old") or a puppy ("Dog number 2 is still a puppy
+🐶
+")
+4. Run the function for both test datasets
+Test data:
+§ Data 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+§ Data 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+Hints: Use tools from all lectures in this section so far 😉*/
+const juliaSurvey = [3, 5, 2, 12, 7];
+const kateSurvey = [4, 1, 15, 8, 3];
+
+const checkDogs = function (juliaDogs, kateDogs) {
+  const juliaFixedogs = juliaSurvey.slice(1, 3);
+  const allDogs = [...juliaFixedogs, ...kateDogs];
+
+  allDogs.forEach((dog, i) => {
+    if (dog >= 3) {
+      console.log(`dog number ${i + 1} is an adult and is ${dog}`);
+    } else if (dog < 3 && dog > 0) {
+      console.log(`dog number ${i + 1} is a puppy and is ${dog}`);
+    } else {
+      console.log('wrong dog age!');
+    }
+  });
+};
+
+// checkDogs(juliaSurvey, kateSurvey);
+// checkDogs(kateSurvey);
+
+const eurToUsd = 1.1;
+const usdMovements = movements.map(mov => Math.trunc(mov * eurToUsd));
+
+const movementsDescriptions = movements.map(
+  (mov, i, arr) =>
+    `movement ${i + 1} you ${mov < 0 ? 'withdrew' : 'deposited'} ${Math.abs(
+      mov
+    )}`
+);
+const deposits = movements.filter(mov => mov > 0);
+// console.log(deposits);
+const withdrawals = movements.filter(mov => mov < 0);
+// console.log(withdrawals);
+
+// reduce method
+const globalBalance = movements.reduce((acc, curr, i, arr) => acc + curr, 0);
+
+// console.log(globalBalance);
