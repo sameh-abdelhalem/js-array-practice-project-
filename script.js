@@ -116,6 +116,28 @@ const createUsernames = function (accs) {
 };
 createUsernames(accounts);
 
+// Event Handlers
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  // prevent form from submitting
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    account => account.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+
+    // display movements
+    // display balance
+    // display summary
+    console.log('loggedIn');
+  }
+});
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -257,29 +279,43 @@ Test data:
 § Data 1: [5, 2, 4, 1, 15, 8, 3]
 § Data 2: [16, 6, 10, 5, 6, 1, 4] */
 
-const calcAverageHumanAge = function (ages) {
-  const humanAges = ages.map(age => {
-    if (age <= 2) {
-      return 2 * age;
-    } else if (age > 2) {
-      return 16 + age * 4;
-    }
-  });
-  const adultDogs = humanAges.filter(age => age >= 18);
+// const calcAverageHumanAge = function (ages) {
+//   const humanAges = ages.map(age => {
+//     if (age <= 2) {
+//       return 2 * age;
+//     } else if (age > 2) {
+//       return 16 + age * 4;
+//     }
+//   });
+//   const adultDogs = humanAges.filter(age => age >= 18);
 
-  const avgAdultsAge =
-    adultDogs.reduce((acc, age) => acc + age, 0) / adultDogs.length;
+//   const avgAdultsAge =
+//     adultDogs.reduce((acc, age) => acc + age, 0) / adultDogs.length;
 
-  console.log(`The dogs human ages are ${humanAges}`);
-  console.log(`The adult dogs ages are ${adultDogs}`);
-  console.log(`The average age of the adult dogs is ${avgAdultsAge}`);
-};
-// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
-// console.log('---------------------------');
-// calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
-const depositsUsdSum = movements
-  .filter(mov => mov > 0)
-  .map(mov => mov * eurToUsd)
-  .reduce((acc, mov, i, arr) => acc + mov, 0);
+//   console.log(`The dogs human ages are ${humanAges}`);
+//   console.log(`The adult dogs ages are ${adultDogs}`);
+//   console.log(`The average age of the adult dogs is ${avgAdultsAge}`);
+//   return avgAdultsAge;
+// };
+const calcAvgHumanAge = dogAgesArr =>
+  dogAgesArr
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+// console.log(calcAvgHumanAge([5, 2, 4, 1, 15, 8, 3]));
+// console.log(calcAvgHumanAge([16, 6, 10, 5, 6, 1, 4]));
 
-console.log(depositsUsdSum);
+// const depositsUsdSum = movements
+//   .filter(mov => mov > 0)
+//   .map(mov => mov * eurToUsd)
+//   .reduce((acc, mov, i, arr) => acc + mov, 0);
+
+const firstWithdrawal = movements.find(mov => {
+  return mov < 0;
+});
+
+// console.log(firstWithdrawal);
+
+const account = accounts.find(account => account.owner === 'Jessica Davis');
+
+// console.log(account);
