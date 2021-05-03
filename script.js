@@ -74,27 +74,25 @@ const displayMovements = movements => {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 const calcAndDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} €`;
 };
-calcAndDisplayBalance(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (account) {
+  const incomes = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes} €`;
-  const outcomes = movements
+  const outcomes = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(outcomes)} €`;
 
-  const interest = movements
+  const interest = account.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * account.interestRate) / 100)
     .reduce((acc, interests) => {
       if (interests >= 1) {
         return acc + interests;
@@ -104,7 +102,6 @@ const calcDisplaySummary = function (movements) {
     }, 0);
   labelSumInterest.textContent = `${interest} €`;
 };
-calcDisplaySummary(account1.movements);
 const createUsernames = function (accs) {
   accs.forEach(acc => {
     acc.username = acc.owner
@@ -131,10 +128,18 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
+    // clear input fields
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
 
     // display movements
+    containerApp.style.opacity = 100;
+    displayMovements(currentAccount.movements);
     // display balance
+    calcAndDisplayBalance(currentAccount.movements);
     // display summary
+    calcDisplaySummary(currentAccount);
+
     console.log('loggedIn');
   }
 });
