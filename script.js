@@ -75,9 +75,10 @@ const displayMovements = movements => {
   });
 };
 
-const calcAndDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
+const calcAndDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+
+  labelBalance.textContent = `${acc.balance} €`;
 };
 
 const calcDisplaySummary = function (account) {
@@ -102,6 +103,14 @@ const calcDisplaySummary = function (account) {
     }, 0);
   labelSumInterest.textContent = `${interest} €`;
 };
+let currentAccount;
+const updateUI = function (acc) {
+  displayMovements(acc.movements);
+  // display balance
+  calcAndDisplayBalance(acc);
+  // display summary
+  calcDisplaySummary(acc);
+};
 const createUsernames = function (accs) {
   accs.forEach(acc => {
     acc.username = acc.owner
@@ -114,7 +123,7 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 
 // Event Handlers
-let currentAccount;
+
 btnLogin.addEventListener('click', function (e) {
   // prevent form from submitting
   e.preventDefault();
@@ -134,14 +143,34 @@ btnLogin.addEventListener('click', function (e) {
 
     // display movements
     containerApp.style.opacity = 100;
-    displayMovements(currentAccount.movements);
-    // display balance
-    calcAndDisplayBalance(currentAccount.movements);
-    // display summary
-    calcDisplaySummary(currentAccount);
+    updateUI(currentAccount);
 
     console.log('loggedIn');
   }
+});
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const recieverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  console.log(amount, recieverAcc);
+  if (
+    recieverAcc &&
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    recieverAcc.username !== currentAccount.username
+  ) {
+    // doing the transfer
+    currentAccount.movements.push(-amount);
+    recieverAcc.movements.push(amount);
+    // update UI
+    updateUI(currentAccount);
+  }
+  // clear Input
+  inputTransferAmount.value = inputTransferTo.value = '';
+  inputTransferAmount.blur();
 });
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
